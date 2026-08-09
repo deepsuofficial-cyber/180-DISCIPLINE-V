@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>180-Day Discipline | Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">⚡ 180-DAY DISCIPLINE</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="tracker.html" class="active">Daily Tracker</a>
+            <a href="notes.html">Notes & Journal</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>📊 Daily Habit & Grid Tracker</h1>
+            <p class="subtitle">Har din ki habits complete karein aur 180-day grid update karein.</p>
+        </header>
+
+        <div class="main-layout">
+            <div class="card">
+                <h3 class="card-title">⚡ Today's Checklist</h3>
+                <ul class="checklist" id="habit-list">
+                    <li class="check-item"><input type="checkbox" id="h1" onchange="saveHabits()"><label for="h1">🏋️ 45-Min Workout</label></li>
+                    <li class="check-item"><input type="checkbox" id="h2" onchange="saveHabits()"><label for="h2">💧 3.5 - 4L Water Daily</label></li>
+                    <li class="check-item"><input type="checkbox" id="h3" onchange="saveHabits()"><label for="h3">🥗 Clean Diet (No Sugar/Junk)</label></li>
+                    <li class="check-item"><input type="checkbox" id="h4" onchange="saveHabits()"><label for="h4">📚 Read 10+ Pages</label></li>
+                    <li class="check-item"><input type="checkbox" id="h5" onchange="saveHabits()"><label for="h5">🧘 10-Min Meditation</label></li>
+                    <li class="check-item"><input type="checkbox" id="h6" onchange="saveHabits()"><label for="h6">🎯 2+ Hours Deep Work</label></li>
+                    <li class="check-item"><input type="checkbox" id="h7" onchange="saveHabits()"><label for="h7">📵 Low Screen Time (< 2 Hrs)</label></li>
+                </ul>
+
+                <div class="btn-group">
+                    <button class="btn btn-green" onclick="markTodayComplete()">Mark Today Completed ✓</button>
+                    <button class="btn btn-outline" onclick="resetHabits()">Reset Habits</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="grid-header">
+                    <h3 class="card-title">🗓️ 180-Day Grid Tracker</h3>
+                    <span class="sub-text">(Click box to toggle)</span>
+                </div>
+                <div class="day-grid" id="grid-container"></div>
+                <div class="grid-footer">
+                    <button class="btn btn-outline-danger" onclick="resetAll()">Reset Entire 180 Days</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TOTAL_DAYS = 180;
+        let completedDays = JSON.parse(localStorage.getItem('discipline_completed_days')) || [];
+        let habitsState = JSON.parse(localStorage.getItem('discipline_habits_state')) || {};
+
+        function renderGrid() {
+            const container = document.getElementById('grid-container');
+            container.innerHTML = '';
+            const currentDay = completedDays.length + 1 <= TOTAL_DAYS ? completedDays.length + 1 : TOTAL_DAYS;
+
+            for (let i = 1; i <= TOTAL_DAYS; i++) {
+                const box = document.createElement('div');
+                box.className = 'day-box';
+                if (completedDays.includes(i)) box.classList.add('completed');
+                if (i === currentDay) box.classList.add('today');
+                box.innerText = i;
+                box.onclick = () => toggleDay(i);
+                container.appendChild(box);
+            }
+        }
+
+        function toggleDay(dayNum) {
+            const index = completedDays.indexOf(dayNum);
+            if (index > -1) completedDays.splice(index, 1);
+            else completedDays.push(dayNum);
+            completedDays.sort((a, b) => a - b);
+            localStorage.setItem('discipline_completed_days', JSON.stringify(completedDays));
+            renderGrid();
+        }
+
+        function markTodayComplete() {
+            const currentDay = completedDays.length + 1 <= TOTAL_DAYS ? completedDays.length + 1 : TOTAL_DAYS;
+            if (!completedDays.includes(currentDay)) {
+                completedDays.push(currentDay);
+                completedDays.sort((a, b) => a - b);
+                localStorage.setItem('discipline_completed_days', JSON.stringify(completedDays));
+                renderGrid();
+            }
+        }
+
+        function saveHabits() {
+            const checkboxes = document.querySelectorAll('#habit-list input[type="checkbox"]');
+            checkboxes.forEach(cb => habitsState[cb.id] = cb.checked);
+            localStorage.setItem('discipline_habits_state', JSON.stringify(habitsState));
+        }
+
+        function loadHabits() {
+            const checkboxes = document.querySelectorAll('#habit-list input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                if (habitsState[cb.id] !== undefined) cb.checked = habitsState[cb.id];
+            });
+        }
+
+        function resetHabits() {
+            document.querySelectorAll('#habit-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+            habitsState = {};
+            localStorage.removeItem('discipline_habits_state');
+        }
+
+        function resetAll() {
+            if (confirm("Kya aap reset karna chahte hain?")) {
+                completedDays = [];
+                localStorage.removeItem('discipline_completed_days');
+                resetHabits();
+                renderGrid();
+            }
+        }
+
+        window.onload = () => { renderGrid(); loadHabits(); };
+    </script>
+</body>
+</html>
