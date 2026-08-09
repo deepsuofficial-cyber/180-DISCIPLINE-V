@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>180-Day Discipline | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">⚡ 180-DAY DISCIPLINE</div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="tracker.html">Daily Tracker</a>
+            <a href="notes.html">Notes & Journal</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="hero-card">
+            <div class="badge">MISSION 180 DAYS</div>
+            <h1 class="welcome-heading">WELCOME DEEPSU! 🔥</h1>
+            <p class="subtitle">6 Mahine. High Focus. Zero Excuses. Apni Life Ko Master Karein.</p>
+        </header>
+
+        <h2 class="section-heading">📌 Progress Overview</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="current-day">1</div>
+                <div class="stat-label">Current Active Day</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completed-days">0</div>
+                <div class="stat-label">Days Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="remaining-days">180</div>
+                <div class="stat-label">Days Remaining</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completion-pct">0.0%</div>
+                <div class="stat-label">Total Progress</div>
+            </div>
+        </div>
+
+        <div class="card progress-card">
+            <div class="progress-header">
+                <span>180-Day Challenge Status</span>
+                <span id="bar-pct">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <h2 class="section-heading">🛡️ 3 Non-Negotiable Pillars</h2>
+        <div class="pillars-grid">
+            <div class="pillar-card border-green">
+                <h3 class="color-green">1. Physical Mastery</h3>
+                <p>🏋️ 45-Min Workout Daily</p>
+                <p>💧 3.5 - 4L Water Intake</p>
+                <p>🥗 Clean Diet (No Sugar/Junk)</p>
+            </div>
+            <div class="pillar-card border-blue">
+                <h3 class="color-blue">2. Mental Focus</h3>
+                <p>📚 10+ Pages Reading Daily</p>
+                <p>🧘 10-Min Mindfulness</p>
+                <p>📵 Low Screen Time (< 2 Hrs)</p>
+            </div>
+            <div class="pillar-card border-cyan">
+                <h3 class="color-cyan">3. Work & Execution</h3>
+                <p>🎯 2+ Hours High-Focus Deep Work</p>
+                <p>🚀 Daily Skill Building</p>
+                <p>📝 Night Planning for Next Day</p>
+            </div>
+        </div>
+
+        <div class="cta-box">
+            <p>"Discipline is choosing between what you want now and what you want most."</p>
+            <a href="tracker.html" class="btn btn-green">Go To Daily Tracker →</a>
+        </div>
+    </div>
+
+    <script>
+        const completedDays = JSON.parse(localStorage.getItem('discipline_completed_days')) || [];
+        const TOTAL_DAYS = 180;
+        const count = completedDays.length;
+        const remaining = TOTAL_DAYS - count;
+        const currentDay = count + 1 <= TOTAL_DAYS ? count + 1 : TOTAL_DAYS;
+        const pct = ((count / TOTAL_DAYS) * 100).toFixed(1);
+
+        document.getElementById('current-day').innerText = currentDay;
+        document.getElementById('completed-days').innerText = count;
+        document.getElementById('remaining-days').innerText = remaining;
+        document.getElementById('completion-pct').innerText = pct + "%";
+        document.getElementById('bar-pct').innerText = pct + "%";
+        document.getElementById('progress-fill').style.width = pct + "%";
+    </script>
+</body>
+</html>
